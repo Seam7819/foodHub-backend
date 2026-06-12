@@ -1,19 +1,19 @@
-import express from 'express'
-import cors from 'cors'
-import dotenv from 'dotenv'
+import express from "express";
+import cors from "cors";
+
+import { indexRoute } from "./app/routes";
 
 const app = express();
-dotenv.config()
 
+// MUST be FIRST
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+}));
 
 app.use(express.json());
-app.use(cors({
-    origin: process.env.FRONTEND_URL, 
-    credentials: true,
-}))
+app.use(express.urlencoded({ extended: true }));
 
-
-
-
+app.use("/api", indexRoute);
 
 export default app;

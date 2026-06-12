@@ -1,13 +1,18 @@
+import dotenv from "dotenv";
+dotenv.config();
+
 import app from "./app";
 
-async function foodHub(){
-    try{
-        app.listen(process.env.PORT, ()=>{
-            console.log(`server is running on port ${process.env.PORT}`);
-        })
-    }catch(err){
-        console.error(err);
-    }
+async function foodHub() {
+  try {
+    const PORT = process.env.PORT || 5000;
+
+    app.listen(PORT, () => {
+      console.log(`server is running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 foodHub();
