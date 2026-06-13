@@ -1,13 +1,20 @@
 import { z } from "zod";
 
-export const registerValidation = z.object({
-  name: z.string(),
+const registerValidationSchema = z.object({
+  name: z
+    .string()
+    .min(2, "Name is required"),
 
-  email: z.email(),
+  email: z
+    .string()
+    .email("Invalid email"),
 
   password: z
     .string()
-    .min(6),
+    .min(
+      6,
+      "Password must be at least 6 characters"
+    ),
 
   role: z.enum([
     "CUSTOMER",
@@ -23,8 +30,17 @@ export const registerValidation = z.object({
     .optional(),
 });
 
-export const loginValidation = z.object({
-  email: z.email(),
+const loginValidationSchema = z.object({
+  email: z
+    .string()
+    .email(),
 
-  password: z.string(),
+  password: z
+    .string()
+    .min(1),
 });
+
+export const AuthValidation = {
+  registerValidationSchema,
+  loginValidationSchema,
+};
