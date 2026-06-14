@@ -64,9 +64,48 @@ const updateCategory = async (
     name?: string;
   }
 ) => {
+  const category = await prisma.category.findUnique({
+    where: { id },
+  });
+
+  if (!category) {
+    throw new AppError(404, "Category not found");
+  }
+
+  if (payload.name) {
+    const existingCategory =
+      await prisma.category.findFirst({
+        where: {
+          name: payload.name,
+          NOT: {
+            id,
+          },
+        },
+      });
+
+    if (existingCategory) {
+      throw new AppError(
+        400,
+        "Category already exists"
+      );
+    }
+  }
+
+  return prisma.category.update({
+    where: { id },
+    data: payload,
+  });
+};
+
+const deleteCategory = async (
+  id: string
+) => {
   const category =
     await prisma.category.findUnique({
       where: { id },
+      include: {
+        meals: true,
+      },
     });
 
   if (!category) {
@@ -76,27 +115,10 @@ const updateCategory = async (
     );
   }
 
-  const result =
-    await prisma.category.update({
-      where: { id },
-      data: payload,
-    });
-
-  return result;
-};
-
-const deleteCategory = async (
-  id: string
-) => {
-  const category =
-    await prisma.category.findUnique({
-      where: { id },
-    });
-
-  if (!category) {
+  if (category.meals.length > 0) {
     throw new AppError(
-      404,
-      "Category not found"
+      400,
+      "Cannot delete category with meals"
     );
   }
 
