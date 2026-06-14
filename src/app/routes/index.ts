@@ -4,7 +4,8 @@ import { middlewareRoute } from "../middleware/auth.route";
 import globalErrorHandler from "../middleware/globalErrorHandler";
 import notFound from "../middleware/notFound";
 import { AdminRoutes } from "../module/admin/admin.routes";
-import { CategoryRoutes } from "../category/category.routes";
+import { CategoryRoutes } from "../module/category/category.routes";
+import { MealRoutes } from "../module/meal/meal.routes";
 
 
 const router = Router();
@@ -33,6 +34,11 @@ router.use('/test-admin', AdminRoutes);
 router.use(
   "/categories",
   CategoryRoutes
+);
+
+router.use(
+  "/meals",
+  MealRoutes
 );
 
 

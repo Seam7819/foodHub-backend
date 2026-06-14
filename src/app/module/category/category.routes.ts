@@ -3,8 +3,8 @@ import { Router } from "express";
 
 import { CategoryController } from "./category.controller";
 import { CategoryValidation } from "./category.validation";
-import validateRequest from "../middleware/validateRequest";
-import auth from "../middleware/auth";
+import validateRequest from "../../middleware/validateRequest";
+import auth from "../../middleware/auth";
 
 const router = Router();
 

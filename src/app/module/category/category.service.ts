@@ -1,5 +1,5 @@
-import { prisma } from "../../lib/prisma";
-import AppError from "../errors/appError";
+import { prisma } from "../../../lib/prisma";
+import AppError from "../../errors/appError";
 
 
 const createCategory = async (
