@@ -222,33 +222,3 @@ model Review {
   @@index([mealId])
 }
 
-model Cart {
-  id String @id @default(uuid())
-
-  userId String @unique
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  items CartItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model CartItem {
-  id String @id @default(uuid())
-
-  cartId String
-
-  mealId String
-
-  quantity Int @default(1)
-
-  cart Cart @relation(fields: [cartId], references: [id], onDelete: Cascade)
-
-  meal Meal @relation(fields: [mealId], references: [id])
-
-  createdAt DateTime @default(now())
-
-  @@unique([cartId, mealId])
-}

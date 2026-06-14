@@ -6,6 +6,7 @@ import notFound from "../middleware/notFound";
 import { AdminRoutes } from "../module/admin/admin.routes";
 import { CategoryRoutes } from "../module/category/category.routes";
 import { MealRoutes } from "../module/meal/meal.routes";
+import { CartRoutes } from "../module/cart/cart.routes";
 
 
 const router = Router();
@@ -41,5 +42,9 @@ router.use(
   MealRoutes
 );
 
+router.use(
+  "/cart",
+  CartRoutes
+);
 
 export const indexRoute = router;
