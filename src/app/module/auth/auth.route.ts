@@ -14,6 +14,7 @@ router.post(
   register
 );
 
+
 router.post(
   "/register",
   validateRequest(
