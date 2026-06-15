@@ -7,6 +7,7 @@ import { AdminRoutes } from "../module/admin/admin.routes";
 import { CategoryRoutes } from "../module/category/category.routes";
 import { MealRoutes } from "../module/meal/meal.routes";
 import { CartRoutes } from "../module/cart/cart.routes";
+import { OrderRoutes } from "../module/order/order.routes";
 
 
 const router = Router();
@@ -46,5 +47,11 @@ router.use(
   "/cart",
   CartRoutes
 );
+
+router.use(
+  "/orders",
+  OrderRoutes
+);
+
 
 export const indexRoute = router;
