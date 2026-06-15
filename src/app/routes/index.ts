@@ -13,6 +13,7 @@ import { UserRoutes } from "../module/user/user.routes";
 import { AdminOrderRoutes } from "../module/order/adminOrder.routes";
 import { ProviderRoutes } from "../module/provider/provider.routes";
 import { DashboardRoutes } from "../module/dashboard/dashboard.routes";
+import { ProviderDashboardRoutes } from "../module/provider/providerDashboard.routes";
 
 
 const router = Router();
@@ -82,6 +83,12 @@ router.use(
 router.use(
   "/admin/dashboard",
   DashboardRoutes
+);
+
+
+router.use(
+  "/provider/dashboard",
+  ProviderDashboardRoutes
 );
 
 export const indexRoute = router;
