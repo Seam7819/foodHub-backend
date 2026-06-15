@@ -114,9 +114,21 @@ const loginUser = async (
         .accessExpiresIn as string
     );
 
+    const jwtPayload = {
+  id: user.id,
+  role: user.role,
+};
+    const refreshToken =
+  generateToken(
+    jwtPayload,
+    process.env.JWT_REFRESH_SECRET!,
+    process.env.JWT_REFRESH_EXPIRES_IN!
+  );
+
   return {
     accessToken,
     user,
+    refreshToken
   };
 };
 

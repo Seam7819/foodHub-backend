@@ -1,4 +1,6 @@
+import { generateToken, verifyToken } from "../../helpers/jwtHelper";
 import { prisma } from "../../lib/prisma";
+import AppError from "../errors/appError";
 
 const getMe = async (userId: string) => {
   const user = await prisma.user.findUnique({
@@ -21,6 +23,51 @@ const getMe = async (userId: string) => {
 
   return user;
   
+};
+
+const refreshToken = async (
+  token: string
+) => {
+  if (!token) {
+    throw new AppError(
+      401,
+      "Refresh token required"
+    );
+  }
+
+  const decoded =
+    verifyToken(
+      token,
+      process.env.JWT_REFRESH_SECRET!
+    ) as any;
+
+  const user =
+    await prisma.user.findUnique({
+      where: {
+        id: decoded.id,
+      },
+    });
+
+  if (!user) {
+    throw new AppError(
+      404,
+      "User not found"
+    );
+  }
+
+  const accessToken =
+    generateToken(
+      {
+        id: user.id,
+        role: user.role,
+      },
+      process.env.JWT_ACCESS_SECRET!,
+      process.env.JWT_ACCESS_EXPIRES_IN!
+    );
+
+  return {
+    accessToken,
+  };
 };
 
 export const AuthService = {
