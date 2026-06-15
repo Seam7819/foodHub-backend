@@ -88,9 +88,66 @@ const cancelOrder = catchAsync(
   }
 );
 
+const getProviderOrders =
+  catchAsync(
+    async (req, res) => {
+      const result =
+        await OrderService.getProviderOrders(
+          req.user!.id
+        );
+
+      sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message:
+          "Provider orders retrieved successfully",
+        data: result,
+      });
+    }
+  );
+
+const updateOrderStatus =
+  catchAsync(
+    async (req, res) => {
+      const result =
+        await OrderService.updateOrderStatus(
+          req.user!.id,
+          req.params.id as string,
+          req.body.status
+        );
+
+      sendResponse(res, {
+        statusCode: 200,
+        success: true,
+        message:
+          "Order status updated successfully",
+        data: result,
+      });
+    }
+  );
+
+  const getAllOrders =
+  catchAsync(
+    async (req, res) => {
+      const result =
+        await OrderService.getAllOrders();
+
+      sendResponse(res, {
+        success: true,
+        statusCode: 200,
+        message:
+          "All orders retrieved successfully",
+        data: result,
+      });
+    }
+  );
+
 export const OrderController = {
   createOrder,
   getMyOrders,
   getSingleOrder,
   cancelOrder,
+getAllOrders,
+  getProviderOrders,
+  updateOrderStatus,
 };

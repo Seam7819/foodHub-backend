@@ -8,6 +8,11 @@ import { CategoryRoutes } from "../module/category/category.routes";
 import { MealRoutes } from "../module/meal/meal.routes";
 import { CartRoutes } from "../module/cart/cart.routes";
 import { OrderRoutes } from "../module/order/order.routes";
+import { ProviderOrderRoutes } from "../module/order/providerOrder.routes";
+import { UserRoutes } from "../module/user/user.routes";
+import { AdminOrderRoutes } from "../module/order/adminOrder.routes";
+import { ProviderRoutes } from "../module/provider/provider.routes";
+import { DashboardRoutes } from "../module/dashboard/dashboard.routes";
 
 
 const router = Router();
@@ -53,5 +58,30 @@ router.use(
   OrderRoutes
 );
 
+router.use(
+  "/provider/orders",
+  ProviderOrderRoutes
+);
+
+
+router.use(
+  "/users",
+  UserRoutes
+);
+
+router.use(
+  "/admin/orders",
+  AdminOrderRoutes
+);
+
+router.use(
+  "/providers",
+  ProviderRoutes
+);
+
+router.use(
+  "/admin/dashboard",
+  DashboardRoutes
+);
 
 export const indexRoute = router;
