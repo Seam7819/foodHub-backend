@@ -13,7 +13,7 @@ import config from "../../../config";
 const registerUser = async (
   payload: any
 ) => {
-  
+
   const existingUser =
     await prisma.user.findUnique({
       where: {
@@ -27,7 +27,7 @@ const registerUser = async (
       "Email already exists"
     );
   }
-  
+
 
   const hashedPassword =
     await bcrypt.hash(
@@ -50,10 +50,16 @@ const registerUser = async (
             },
           });
 
-        if (
-          payload.role ===
-          "PROVIDER"
-        ) {
+        if (payload.role === "PROVIDER") {
+          if (!payload.businessName || !payload.address) {
+            throw new AppError(
+              400,
+              "Business name and address are required"
+            );
+          }
+        }
+
+        {
           await tx.providerProfile.create(
             {
               data: {
@@ -103,7 +109,7 @@ const loginUser = async (
       "Invalid credentials"
     );
   }
-const { password, ...safeUser } = user;
+  const { password, ...safeUser } = user;
   const accessToken =
     generateToken(
       {
@@ -116,16 +122,16 @@ const { password, ...safeUser } = user;
         .accessExpiresIn as string
     );
 
-    const jwtPayload = {
-  id: user.id,
-  role: user.role,
-};
-    const refreshToken =
-  generateToken(
-    jwtPayload,
-    process.env.JWT_REFRESH_SECRET!,
-    process.env.JWT_REFRESH_EXPIRES_IN!
-  );
+  const jwtPayload = {
+    id: user.id,
+    role: user.role,
+  };
+  const refreshToken =
+    generateToken(
+      jwtPayload,
+      process.env.JWT_REFRESH_SECRET!,
+      process.env.JWT_REFRESH_EXPIRES_IN!
+    );
 
   return {
     accessToken,
