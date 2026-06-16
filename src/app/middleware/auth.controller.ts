@@ -4,7 +4,7 @@ import { AuthService } from "./auth.service";
 import { sendResponse } from "../../shared/sendResponse";
 
 export const getMe = catchAsync(
-  async (req:Request, res:Response) => {
+  async (req: Request, res: Response) => {
     const result =
       await AuthService.getMe(
         req.user!.id
@@ -18,3 +18,26 @@ export const getMe = catchAsync(
     });
   }
 );
+
+const refreshToken =
+  catchAsync(
+    async (req, res) => {
+      const result =
+        await AuthService.refreshToken(
+          req.body.refreshToken
+        );
+
+      sendResponse(res, {
+        success: true,
+        statusCode: 200,
+        message:
+          "Access token generated successfully",
+        data: result,
+      });
+    }
+  );
+
+export const AuthController = {
+  getMe,
+  refreshToken
+}

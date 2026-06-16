@@ -13,6 +13,7 @@ import config from "../../../config";
 const registerUser = async (
   payload: any
 ) => {
+  
   const existingUser =
     await prisma.user.findUnique({
       where: {
@@ -26,6 +27,7 @@ const registerUser = async (
       "Email already exists"
     );
   }
+  
 
   const hashedPassword =
     await bcrypt.hash(
@@ -101,7 +103,7 @@ const loginUser = async (
       "Invalid credentials"
     );
   }
-
+const { password, ...safeUser } = user;
   const accessToken =
     generateToken(
       {
@@ -127,8 +129,8 @@ const loginUser = async (
 
   return {
     accessToken,
-    user,
-    refreshToken
+    refreshToken,
+    user: safeUser,
   };
 };
 

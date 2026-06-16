@@ -25,7 +25,7 @@ const getMe = async (userId: string) => {
   
 };
 
-const refreshToken = async (
+ const refreshToken = async (
   token: string
 ) => {
   if (!token) {
@@ -72,5 +72,6 @@ const refreshToken = async (
 
 export const AuthService = {
     getMe,
+    refreshToken
 }
 
