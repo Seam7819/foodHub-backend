@@ -25,13 +25,11 @@ router.post(
   ),
   CartController.addToCart
 );
-
 router.get(
   "/",
   auth("CUSTOMER"),
   CartController.getMyCart
 );
-
 router.patch(
   "/item/:id",
   auth("CUSTOMER"),
@@ -40,7 +38,6 @@ router.patch(
   ),
   CartController.updateCartItem
 );
-
 router.delete(
   "/item/:id",
   auth("CUSTOMER"),
