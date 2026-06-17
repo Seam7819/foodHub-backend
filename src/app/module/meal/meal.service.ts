@@ -185,9 +185,16 @@ const getAllMeals = async (
 const getSingleMeal = async (
   id: string
 ) => {
+  if (!id?.trim()) {
+    throw new AppError(
+      400,
+      "Meal id is required"
+    );
+  }
+
   const meal =
     await prisma.meal.findUnique({
-      where: { id },
+      where: { id: id.trim() },
 
       include: {
         category: true,

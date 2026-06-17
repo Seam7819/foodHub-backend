@@ -8,9 +8,16 @@ const addToCart = async (
     quantity: number;
   }
 ) => {
+  if (!payload.mealId?.trim()) {
+    throw new AppError(
+      400,
+      "Meal id is required"
+    );
+  }
+
   const meal = await prisma.meal.findUnique({
     where: {
-      id: payload.mealId,
+      id: payload.mealId.trim(),
     },
   });
 

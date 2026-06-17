@@ -26,15 +26,6 @@ router.use(
     "/auth",
     middlewareRoute
 );
-router.use(
-    "/auth",
-    globalErrorHandler
-);
-router.use(
-    "/auth",
-    notFound
-);
-
 
 router.use('/test-admin', AdminRoutes);
 
@@ -90,5 +81,8 @@ router.use(
   "/provider/dashboard",
   ProviderDashboardRoutes
 );
+
+router.use(notFound);
+router.use(globalErrorHandler);
 
 export const indexRoute = router;

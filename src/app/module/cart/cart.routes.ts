@@ -17,6 +17,15 @@ router.post(
   CartController.addToCart
 );
 
+router.post(
+  "/",
+  auth("CUSTOMER"),
+  validateRequest(
+    CartValidation.addToCartValidationSchema
+  ),
+  CartController.addToCart
+);
+
 router.get(
   "/",
   auth("CUSTOMER"),
