@@ -35,6 +35,19 @@ const getAdminDashboardStats =
         },
       });
 
+    // counts by status
+    const placed = await prisma.order.count({ where: { status: "PLACED" } });
+    const preparing = await prisma.order.count({ where: { status: "PREPARING" } });
+    const ready = await prisma.order.count({ where: { status: "READY" } });
+    const delivered = await prisma.order.count({ where: { status: "DELIVERED" } });
+    const cancelled = await prisma.order.count({ where: { status: "CANCELLED" } });
+
+    const recentOrders = await prisma.order.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      include: { items: { include: { meal: true } } },
+    });
+
     return {
       totalUsers,
       totalCustomers,
@@ -42,9 +55,17 @@ const getAdminDashboardStats =
       totalMeals,
       totalOrders,
 
-      totalRevenue:
-        revenueResult._sum
-          .totalPrice || 0,
+      totalRevenue: revenueResult._sum.totalPrice || 0,
+
+      ordersByStatus: {
+        placed,
+        preparing,
+        ready,
+        delivered,
+        cancelled,
+      },
+
+      recentOrders,
     };
   };
 

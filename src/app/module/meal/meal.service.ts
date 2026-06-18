@@ -150,6 +150,8 @@ const getAllMeals = async (
 
         provider: {
           select: {
+            id: true,
+            userId: true,
             businessName: true,
           },
         },

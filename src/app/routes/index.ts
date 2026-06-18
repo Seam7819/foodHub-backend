@@ -14,6 +14,7 @@ import { AdminOrderRoutes } from "../module/order/adminOrder.routes";
 import { ProviderRoutes } from "../module/provider/provider.routes";
 import { DashboardRoutes } from "../module/dashboard/dashboard.routes";
 import { ProviderDashboardRoutes } from "../module/provider/providerDashboard.routes";
+import { HomeRoutes } from "../module/home/home.routes";
 
 
 const router = Router();
@@ -80,6 +81,11 @@ router.use(
 router.use(
   "/provider/dashboard",
   ProviderDashboardRoutes
+);
+
+router.use(
+  "/home",
+  HomeRoutes
 );
 
 router.use(notFound);

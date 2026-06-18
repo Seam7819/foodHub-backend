@@ -78,6 +78,39 @@ const getProviderDashboard =
             order.totalPrice,
           0
         );
+    // recent orders for provider
+    const recentOrders = await prisma.order.findMany({
+      where: {
+        items: {
+          some: {
+            meal: { providerId: provider.id },
+          },
+        },
+      },
+      orderBy: { createdAt: "desc" },
+      take: 5,
+      include: { items: { include: { meal: true } } },
+    });
+
+    // top meals by quantity sold (aggregate in JS)
+    const orderItems = await prisma.orderItem.findMany({
+      where: {
+        meal: { providerId: provider.id },
+      },
+      include: { meal: true },
+    });
+
+    const totalsByMeal: Record<string, { meal: any; quantity: number }> = {};
+    for (const oi of orderItems) {
+      if (!totalsByMeal[oi.mealId]) {
+        totalsByMeal[oi.mealId] = { meal: oi.meal, quantity: 0 };
+      }
+      totalsByMeal[oi.mealId]!.quantity += oi.quantity;
+    }
+
+    const topMeals = Object.values(totalsByMeal)
+      .sort((a, b) => b.quantity - a.quantity)
+      .slice(0, 5);
 
     return {
       totalMeals,
@@ -85,6 +118,8 @@ const getProviderDashboard =
       pendingOrders,
       completedOrders,
       totalRevenue,
+      recentOrders,
+      topMeals,
     };
   };
 
