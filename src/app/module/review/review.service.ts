@@ -83,7 +83,7 @@ const updateMealRating =
       reviewCount === 0
         ? 0
         : reviews.reduce(
-            (sum, review) =>
+            (sum, review): number =>
               sum + review.rating,
             0
           ) / reviewCount;

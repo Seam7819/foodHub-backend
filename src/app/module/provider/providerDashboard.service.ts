@@ -51,7 +51,7 @@ const getProviderDashboard =
 
     const pendingOrders =
       providerOrders.filter(
-        (order) =>
+        (order): boolean =>
           order.status ===
             "PLACED" ||
           order.status ===
@@ -60,7 +60,7 @@ const getProviderDashboard =
 
     const completedOrders =
       providerOrders.filter(
-        (order) =>
+        (order): boolean =>
           order.status ===
           "DELIVERED"
       ).length;
@@ -68,12 +68,12 @@ const getProviderDashboard =
     const totalRevenue =
       providerOrders
         .filter(
-          (order) =>
+          (order): boolean =>
             order.status ===
             "DELIVERED"
         )
         .reduce(
-          (sum, order) =>
+          (sum, order): number =>
             sum +
             order.totalPrice,
           0
@@ -109,7 +109,7 @@ const getProviderDashboard =
     }
 
     const topMeals = Object.values(totalsByMeal)
-      .sort((a, b) => b.quantity - a.quantity)
+      .sort((a, b): number => b.quantity - a.quantity)
       .slice(0, 5);
 
     return {

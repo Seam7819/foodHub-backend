@@ -1,3 +1,4 @@
+import type { Prisma } from "../../../generated/client";
 import { OrderStatus } from "../../../generated/enums";
 import { prisma } from "../../../lib/prisma";
 import AppError from "../../errors/appError";
@@ -30,7 +31,7 @@ const createOrder = async (
   const providerIds = [
     ...new Set(
       cart.items.map(
-        (item) => item.meal.providerId
+        (item): string => item.meal.providerId
       )
     ),
   ];
@@ -43,14 +44,14 @@ const createOrder = async (
   }
 
   const totalPrice = cart.items.reduce(
-    (sum, item) =>
+    (sum, item): number =>
       sum +
       item.quantity * item.meal.price,
     0
   );
 
   const order = await prisma.$transaction(
-    async (tx) => {
+    async (tx: Prisma.TransactionClient) => {
       const createdOrder =
         await tx.order.create({
           data: {

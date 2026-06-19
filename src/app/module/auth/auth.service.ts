@@ -1,7 +1,5 @@
 import bcrypt from "bcrypt";
-
-
-
+import type { Prisma } from "../../../generated/client";
 
 import { generateToken } from "../../../helpers/jwtHelper";
 
@@ -13,7 +11,6 @@ import config from "../../../config";
 const registerUser = async (
   payload: any
 ) => {
-
   const existingUser =
     await prisma.user.findUnique({
       where: {
@@ -28,7 +25,6 @@ const registerUser = async (
     );
   }
 
-
   const hashedPassword =
     await bcrypt.hash(
       payload.password,
@@ -37,7 +33,7 @@ const registerUser = async (
 
   const result =
     await prisma.$transaction(
-      async (tx) => {
+      async (tx: Prisma.TransactionClient) => {
         const user =
           await tx.user.create({
             data: {
@@ -59,19 +55,15 @@ const registerUser = async (
           }
         }
 
-        {
-          await tx.providerProfile.create(
-            {
-              data: {
-                businessName:
-                  payload.businessName!,
-                address:
-                  payload.address!,
-                userId: user.id,
-              },
-            }
-          );
-        }
+        await tx.providerProfile.create({
+          data: {
+            businessName:
+              payload.businessName!,
+            address:
+              payload.address!,
+            userId: user.id,
+          },
+        });
 
         return user;
       }
@@ -109,6 +101,7 @@ const loginUser = async (
       "Invalid credentials"
     );
   }
+
   const { password, ...safeUser } = user;
   const accessToken =
     generateToken(
@@ -116,10 +109,8 @@ const loginUser = async (
         id: user.id,
         role: user.role,
       },
-      config.jwt
-        .accessSecret as string,
-      config.jwt
-        .accessExpiresIn as string
+      config.jwt.accessSecret as string,
+      config.jwt.accessExpiresIn as string
     );
 
   const jwtPayload = {

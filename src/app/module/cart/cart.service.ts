@@ -96,7 +96,7 @@ const getMyCart = async (
   }
 
   const totalPrice =
-    cart.items.reduce(
+    cart.items.reduce<number>(
       (sum, item) =>
         sum +
         item.quantity *
