@@ -21,14 +21,20 @@ const getHomeData = async () => {
   });
 
   const providers = providersRaw
-    .map((p) => ({
+    .map((p): {
+      id: string;
+      businessName: string;
+      logo: string | null;
+      mealCount: number;
+      user: { id: string };
+    } => ({
       id: p.id,
       businessName: p.businessName,
       logo: p.logo,
       mealCount: p.meals.length,
       user: { id: p.userId },
     }))
-    .sort((a, b) => b.mealCount - a.mealCount)
+    .sort((a, b): number => b.mealCount - a.mealCount)
     .slice(0, 8);
 
   // categories
