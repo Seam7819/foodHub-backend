@@ -1,6 +1,6 @@
-import { catchAsync } from "../../../shared/catchAsync";
-import { sendResponse } from "../../../shared/sendResponse";
-import { HomeService } from "./home.service";
+import { catchAsync } from "../../../shared/catchAsync.js";
+import { sendResponse } from "../../../shared/sendResponse.js";
+import { HomeService } from "./home.service.js";
 
 const getHome = catchAsync(async (req, res) => {
   const data = await HomeService.getHomeData();

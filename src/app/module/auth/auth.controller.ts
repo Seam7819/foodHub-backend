@@ -1,10 +1,10 @@
 import { Request, Response } from "express";
 
-import { AuthService } from "./auth.service";
+import { AuthService } from "./auth.service.js";
 
-import { catchAsync } from "../../../shared/catchAsync";
+import { catchAsync } from "../../../shared/catchAsync.js";
 
-import { sendResponse } from "../../../shared/sendResponse";
+import { sendResponse } from "../../../shared/sendResponse.js";
 
 export const register = catchAsync(
   async (

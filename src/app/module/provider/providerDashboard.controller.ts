@@ -1,7 +1,7 @@
 
-import { catchAsync } from "../../../shared/catchAsync";
-import { sendResponse } from "../../../shared/sendResponse";
-import { ProviderDashboardService } from "./providerDashboard.service";
+import { catchAsync } from "../../../shared/catchAsync.js";
+import { sendResponse } from "../../../shared/sendResponse.js";
+import { ProviderDashboardService } from "./providerDashboard.service.js";
 
 const getProviderDashboard =
   catchAsync(

@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 
 
-import { OrderService } from "./order.service";
-import { catchAsync } from "../../../shared/catchAsync";
-import { sendResponse } from "../../../shared/sendResponse";
+import { OrderService } from "./order.service.js";
+import { catchAsync } from "../../../shared/catchAsync.js";
+import { sendResponse } from "../../../shared/sendResponse.js";
 
 const createOrder = catchAsync(
   async (

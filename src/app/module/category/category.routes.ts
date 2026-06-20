@@ -1,10 +1,10 @@
 import { Router } from "express";
 
 
-import { CategoryController } from "./category.controller";
-import { CategoryValidation } from "./category.validation";
-import validateRequest from "../../middleware/validateRequest";
-import auth from "../../middleware/auth";
+import { CategoryController } from "./category.controller.js";
+import { CategoryValidation } from "./category.validation.js";
+import validateRequest from "../../middleware/validateRequest.js";
+import auth from "../../middleware/auth.js";
 
 const router = Router();
 

@@ -1,4 +1,4 @@
-import { prisma } from "../../../lib/prisma";
+import { prisma } from "../../../lib/prisma.js";
 
 const getHomeData = async () => {
   // carousel: top 5 meals by average rating

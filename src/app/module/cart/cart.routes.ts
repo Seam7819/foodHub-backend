@@ -1,10 +1,10 @@
 import { Router } from "express";
 
-import auth from "../../middleware/auth";
-import validateRequest from "../../middleware/validateRequest";
+import auth from "../../middleware/auth.js";
+import validateRequest from "../../middleware/validateRequest.js";
 
-import { CartController } from "./cart.controller";
-import { CartValidation } from "./cart.validation";
+import { CartController } from "./cart.controller.js";
+import { CartValidation } from "./cart.validation.js";
 
 const router = Router();
 

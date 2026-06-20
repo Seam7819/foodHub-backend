@@ -1,7 +1,7 @@
 
-import { catchAsync } from "../../../shared/catchAsync";
-import { sendResponse } from "../../../shared/sendResponse";
-import { DashboardService } from "./dashboard.service";
+import { catchAsync } from "../../../shared/catchAsync.js";
+import { sendResponse } from "../../../shared/sendResponse.js";
+import { DashboardService } from "./dashboard.service.js";
 
 const getAdminDashboardStats =
   catchAsync(

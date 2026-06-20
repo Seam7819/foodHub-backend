@@ -1,8 +1,8 @@
 import { Router } from "express";
 
-import auth from "../../middleware/auth";
+import auth from "../../middleware/auth.js";
 
-import { ProviderDashboardController } from "./providerDashboard.controller";
+import { ProviderDashboardController } from "./providerDashboard.controller.js";
 
 const router = Router();
 

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { MealService } from "./meal.service";
-import { catchAsync } from "../../../shared/catchAsync";
-import { sendResponse } from "../../../shared/sendResponse";
+import { MealService } from "./meal.service.js";
+import { catchAsync } from "../../../shared/catchAsync.js";
+import { sendResponse } from "../../../shared/sendResponse.js";
 
 const createMeal = catchAsync(
   async (req: Request, res: Response) => {

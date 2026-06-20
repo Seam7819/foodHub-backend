@@ -1,6 +1,6 @@
-import { generateToken, verifyToken } from "../../helpers/jwtHelper";
-import { prisma } from "../../lib/prisma";
-import AppError from "../errors/appError";
+import { generateToken, verifyToken } from "../../helpers/jwtHelper.js";
+import { prisma } from "../../lib/prisma.js";
+import AppError from "../errors/appError.js";
 
 const getMe = async (userId: string) => {
   const user = await prisma.user.findUnique({

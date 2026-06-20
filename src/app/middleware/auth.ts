@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import config from "../../config";
-import { verifyToken } from "../../helpers/jwtHelper";
+import config from "../../config.js";
+import { verifyToken } from "../../helpers/jwtHelper.js";
 
 const auth =
   (...requiredRoles: string[]) =>

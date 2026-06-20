@@ -1,7 +1,7 @@
-import type { Prisma } from "../../../generated/client";
-import { OrderStatus } from "../../../generated/enums";
-import { prisma } from "../../../lib/prisma";
-import AppError from "../../errors/appError";
+import type { Prisma } from "../../../generated/client.js";
+import { OrderStatus } from "../../../generated/enums.js";
+import { prisma } from "../../../lib/prisma.js";
+import AppError from "../../errors/appError.js";
 
 const createOrder = async (
   userId: string,

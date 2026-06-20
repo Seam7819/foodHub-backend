@@ -1,12 +1,12 @@
 import bcrypt from "bcrypt";
-import type { Prisma } from "../../../generated/client";
+import type { Prisma } from "../../../generated/client.js";
 
-import { generateToken } from "../../../helpers/jwtHelper";
+import { generateToken } from "../../../helpers/jwtHelper.js";
 
-import { AppError } from "../../errors/appError";
-import { Role } from "../../../generated/enums";
-import { prisma } from "../../../lib/prisma";
-import config from "../../../config";
+import { AppError } from "../../errors/appError.js";
+import { Role } from "../../../generated/enums.js";
+import { prisma } from "../../../lib/prisma.js";
+import config from "../../../config.js";
 
 const registerUser = async (
   payload: any

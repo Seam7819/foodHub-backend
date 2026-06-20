@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
-import AppError from "../errors/appError";
+import AppError from "../errors/appError.js";
 
 const globalErrorHandler = (
   err: any,

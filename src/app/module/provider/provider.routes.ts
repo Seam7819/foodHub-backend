@@ -1,10 +1,10 @@
 import { Router } from "express";
 
-import auth from "../../middleware/auth";
-import validateRequest from "../../middleware/validateRequest";
+import auth from "../../middleware/auth.js";
+import validateRequest from "../../middleware/validateRequest.js";
 
-import { ProviderController } from "./provider.controller";
-import { ProviderValidation } from "./provider.validation";
+import { ProviderController } from "./provider.controller.js";
+import { ProviderValidation } from "./provider.validation.js";
 
 const router = Router();
 

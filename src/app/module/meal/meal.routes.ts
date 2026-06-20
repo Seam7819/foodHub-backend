@@ -1,10 +1,10 @@
 import { Router } from "express";
 
-import auth from "../../middleware/auth";
-import validateRequest from "../../middleware/validateRequest";
+import auth from "../../middleware/auth.js";
+import validateRequest from "../../middleware/validateRequest.js";
 
-import { MealController } from "./meal.controller";
-import { MealValidation } from "./meal.validation";
+import { MealController } from "./meal.controller.js";
+import { MealValidation } from "./meal.validation.js";
 
 const router = Router();
 

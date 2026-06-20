@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 
 
-import { CartService } from "./cart.service";
-import { catchAsync } from "../../../shared/catchAsync";
-import { sendResponse } from "../../../shared/sendResponse";
+import { CartService } from "./cart.service.js";
+import { catchAsync } from "../../../shared/catchAsync.js";
+import { sendResponse } from "../../../shared/sendResponse.js";
 
 const addToCart = catchAsync(
   async (req: Request, res: Response) => {

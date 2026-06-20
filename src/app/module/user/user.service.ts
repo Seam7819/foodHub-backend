@@ -1,6 +1,6 @@
-import { prisma } from "../../../lib/prisma";
-import { UserStatus } from "../../../generated/enums";
-import AppError from "../../errors/appError";
+import { prisma } from "../../../lib/prisma.js";
+import { UserStatus } from "../../../generated/enums.js";
+import AppError from "../../errors/appError.js";
 
 const updateUserStatus = async (
   userId: string,

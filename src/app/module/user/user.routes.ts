@@ -1,10 +1,10 @@
 import { Router } from "express";
 
-import auth from "../../middleware/auth";
-import validateRequest from "../../middleware/validateRequest";
+import auth from "../../middleware/auth.js";
+import validateRequest from "../../middleware/validateRequest.js";
 
-import { UserController } from "./user.controller";
-import { UserValidation } from "./user.validation";
+import { UserController } from "./user.controller.js";
+import { UserValidation } from "./user.validation.js";
 
 const router = Router();
 

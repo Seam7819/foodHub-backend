@@ -1,7 +1,7 @@
-import { Prisma } from "../../../generated/client";
-import { prisma } from "../../../lib/prisma";
-import AppError from "../../errors/appError";
-import { mealSearchableFields } from "./meal.constants";
+import { Prisma } from "../../../generated/client.js";
+import { prisma } from "../../../lib/prisma.js";
+import AppError from "../../errors/appError.js";
+import { mealSearchableFields } from "./meal.constants.js";
 
 
 

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { catchAsync } from "../../shared/catchAsync";
-import { AuthService } from "./auth.service";
-import { sendResponse } from "../../shared/sendResponse";
+import { catchAsync } from "../../shared/catchAsync.js";
+import { AuthService } from "./auth.service.js";
+import { sendResponse } from "../../shared/sendResponse.js";
 
 export const getMe = catchAsync(
   async (req: Request, res: Response) => {
