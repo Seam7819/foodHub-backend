@@ -15,8 +15,14 @@ app.use(cors({
 
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/", (_req, res) => {
+  res.json({ status: "ok", message: "FoodHub Backend is running." });
+});
+
+app.get(["/favicon.ico", "/favicon.png"], (req, res) => {
+  res.status(204).end();
+});
+
 app.use("/api", indexRoute);
-
-
 
 export default app;
