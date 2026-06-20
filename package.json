@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "tsx watch src/server.ts",
-    "prebuild": "npm run prisma:generate",
+    "prebuild": "npm run prisma:generate && node scripts/fix-generated-source.mjs",
     "build": "tsc && node scripts/postbuild-fix.mjs",
     "start": "node dist/server.js",
     "prisma:generate": "prisma generate",
