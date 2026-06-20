@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import config from "../../config.js";
+import config from "../../config/index.js";
 import { verifyToken } from "../../helpers/jwtHelper.js";
 
 const auth =

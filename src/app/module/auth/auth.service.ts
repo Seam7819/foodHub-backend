@@ -6,7 +6,7 @@ import { generateToken } from "../../../helpers/jwtHelper.js";
 import { AppError } from "../../errors/appError.js";
 import { Role } from "../../../generated/enums.js";
 import { prisma } from "../../../lib/prisma.js";
-import config from "../../../config.js";
+import config from "../../../config/index.js";
 
 const registerUser = async (
   payload: any
