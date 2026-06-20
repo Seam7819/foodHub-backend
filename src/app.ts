@@ -5,11 +5,26 @@ import { indexRoute } from "./app/routes/index.js";
 
 const app = express();
 
+const frontendOrigins = process.env.FRONTEND_URL
+  ? process.env.FRONTEND_URL.split(",").map((url) => url.trim()).filter(Boolean)
+  : [];
+
+const allowedOrigins = [
+  "http://localhost:3000",
+  ...frontendOrigins,
+];
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // MUST be FIRST
 app.use(cors({
-  origin: process.env.FRONTEND_URL,
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
 
