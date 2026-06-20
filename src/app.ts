@@ -5,8 +5,13 @@ import { indexRoute } from "./app/routes/index.js";
 
 const app = express();
 
+const normalizeOrigin = (url: string) => url.trim().replace(/\/+$|\/$/, "");
+
 const frontendOrigins = process.env.FRONTEND_URL
-  ? process.env.FRONTEND_URL.split(",").map((url) => url.trim()).filter(Boolean)
+  ? process.env.FRONTEND_URL
+      .split(",")
+      .map(normalizeOrigin)
+      .filter(Boolean)
   : [];
 
 const allowedOrigins = [
@@ -19,10 +24,10 @@ app.use(express.urlencoded({ extended: true }));
 // MUST be FIRST
 app.use(cors({
   origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (!origin || allowedOrigins.includes(normalizeOrigin(origin))) {
       callback(null, true);
     } else {
-      callback(new Error("Not allowed by CORS"));
+      callback(new Error(`Origin ${origin} not allowed by CORS`));
     }
   },
   credentials: true,
