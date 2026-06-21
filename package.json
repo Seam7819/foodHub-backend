@@ -30,8 +30,11 @@
     "jsonwebtoken": "^9.0.3",
     "pg": "^8.21.0",
     "stripe": "^14.14.0",
-    "zod": "^4.4.3",
+    "zod": "3.25.76",
     "openai": "^4.9.0"
+  },
+  "overrides": {
+    "zod": "3.25.76"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
