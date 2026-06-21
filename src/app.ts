@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import { indexRoute } from "./app/routes/index.js";
+import { OrderController } from "./app/module/order/order.controller.js";
 
 const app = express();
 
@@ -30,6 +31,12 @@ app.use(cors({
   },
   credentials: true,
 }));
+
+app.post(
+  "/api/stripe/webhook",
+  express.raw({ type: "application/json" }),
+  OrderController.handleStripeWebhook
+);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

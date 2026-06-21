@@ -31,6 +31,12 @@ enum OrderStatus {
   CANCELLED
 }
 
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
 model User {
   id          String      @id @default(uuid())
 
@@ -166,6 +172,9 @@ model Order {
   deliveryAddress   String
 
   totalPrice        Float
+
+  paymentIntentId   String?       @unique
+  paymentStatus     PaymentStatus @default(PENDING)
 
   status            OrderStatus   @default(PLACED)
 

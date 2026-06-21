@@ -35,5 +35,11 @@ router.patch(
   OrderController.cancelOrder
 );
 
+router.post(
+  "/confirm/:id",
+  auth("CUSTOMER"),
+  OrderController.getOrderPaymentIntent
+);
+
 export const OrderRoutes =
   router;

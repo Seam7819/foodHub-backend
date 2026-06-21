@@ -20,7 +20,7 @@ const createOrder = catchAsync(
       statusCode: 201,
       success: true,
       message:
-        "Order placed successfully",
+        "Order created and payment intent generated successfully",
       data: result,
     });
   }
@@ -126,7 +126,34 @@ const updateOrderStatus =
     }
   );
 
-  const getAllOrders =
+const getOrderPaymentIntent = catchAsync(
+  async (req, res) => {
+    const result =
+      await OrderService.getOrderPaymentIntent(
+        req.user!.id,
+        req.params.id as string
+      );
+
+    sendResponse(res, {
+      statusCode: 200,
+      success: true,
+      message:
+        "Payment intent retrieved successfully",
+      data: result,
+    });
+  }
+);
+
+const handleStripeWebhook = catchAsync(
+  async (req, res) => {
+    const result =
+      await OrderService.handleStripeWebhook(req);
+
+    res.status(200).json(result);
+  }
+);
+
+const getAllOrders =
   catchAsync(
     async (req, res) => {
       const result =
@@ -147,7 +174,9 @@ export const OrderController = {
   getMyOrders,
   getSingleOrder,
   cancelOrder,
-getAllOrders,
+  getOrderPaymentIntent,
+  getAllOrders,
   getProviderOrders,
   updateOrderStatus,
+  handleStripeWebhook,
 };

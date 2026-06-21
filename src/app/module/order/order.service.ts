@@ -2,6 +2,12 @@ import type { Prisma } from "../../../generated/client.js";
 import { OrderStatus } from "../../../generated/enums.js";
 import { prisma } from "../../../lib/prisma.js";
 import AppError from "../../errors/appError.js";
+import Stripe from "stripe";
+import config from "../../../config/index.js";
+
+const stripe = new Stripe(config.stripe.secretKey, {
+  apiVersion: "2023-10-16",
+});
 
 const createOrder = async (
   userId: string,
@@ -50,28 +56,38 @@ const createOrder = async (
     0
   );
 
-  const order = await prisma.$transaction(
+  const result = await prisma.$transaction(
     async (tx: Prisma.TransactionClient) => {
-      const createdOrder =
-        await tx.order.create({
-          data: {
-            userId,
-            deliveryAddress,
-            totalPrice,
-          },
-        });
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: Math.round(totalPrice * 100),
+        currency: config.stripe.currency,
+        metadata: {
+          userId,
+          type: "foodhub_order",
+        },
+        description: `FoodHub order for user ${userId}`,
+        automatic_payment_methods: {
+          enabled: true,
+        },
+      });
+
+      const createdOrder = await tx.order.create({
+        data: {
+          userId,
+          deliveryAddress,
+          totalPrice,
+          paymentIntentId: paymentIntent.id,
+          paymentStatus: "PENDING",
+        },
+      });
 
       for (const item of cart.items) {
         await tx.orderItem.create({
           data: {
             orderId: createdOrder.id,
-
             mealId: item.meal.id,
-
             mealName: item.meal.name,
-
             quantity: item.quantity,
-
             price: item.meal.price,
           },
         });
@@ -83,11 +99,14 @@ const createOrder = async (
         },
       });
 
-      return createdOrder;
+      return {
+        order: createdOrder,
+        clientSecret: paymentIntent.client_secret,
+      };
     }
   );
 
-  return order;
+  return result;
 };
 
 const getMyOrders = async (
@@ -284,6 +303,80 @@ const updateOrderStatus =
     });
   };
 
+const getOrderPaymentIntent = async (
+  userId: string,
+  orderId: string
+) => {
+  const order = await prisma.order.findUnique({
+    where: {
+      id: orderId,
+    },
+  });
+
+  if (!order) {
+    throw new AppError(404, "Order not found");
+  }
+
+  if (order.userId !== userId) {
+    throw new AppError(403, "Forbidden");
+  }
+
+  if (order.paymentStatus === "PAID") {
+    return {
+      order,
+      message: "Order already paid",
+    };
+  }
+
+  let paymentIntent: Stripe.PaymentIntent;
+
+  if (order.paymentIntentId) {
+    paymentIntent = await stripe.paymentIntents.retrieve(
+      order.paymentIntentId
+    );
+
+    if (
+      paymentIntent.status === "requires_payment_method" ||
+      paymentIntent.status === "requires_confirmation" ||
+      paymentIntent.status === "requires_action"
+    ) {
+      return {
+        order,
+        clientSecret: paymentIntent.client_secret,
+      };
+    }
+  }
+
+  paymentIntent = await stripe.paymentIntents.create({
+    amount: Math.round(order.totalPrice * 100),
+    currency: config.stripe.currency,
+    metadata: {
+      userId,
+      orderId,
+      type: "foodhub_order",
+    },
+    description: `FoodHub order ${order.id}`,
+    automatic_payment_methods: {
+      enabled: true,
+    },
+  });
+
+  await prisma.order.update({
+    where: {
+      id: order.id,
+    },
+    data: {
+      paymentIntentId: paymentIntent.id,
+      paymentStatus: "PENDING",
+    },
+  });
+
+  return {
+    order,
+    clientSecret: paymentIntent.client_secret,
+  };
+};
+
 const cancelOrder = async (
   userId: string,
   orderId: string
@@ -349,6 +442,84 @@ const getAllOrders = async () => {
   });
 };
 
+const handleStripeWebhook = async (
+  req: import("express").Request
+) => {
+  const sig = req.headers["stripe-signature"] as string;
+
+  if (!sig) {
+    throw new AppError(
+      400,
+      "Missing Stripe signature"
+    );
+  }
+
+  let event: Stripe.Event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      sig,
+      config.stripe.webhookSecret
+    );
+  } catch (error) {
+    throw new AppError(
+      400,
+      "Invalid Stripe webhook signature"
+    );
+  }
+
+  if (event.type === "payment_intent.succeeded") {
+    const paymentIntent =
+      event.data.object as Stripe.PaymentIntent;
+
+    if (paymentIntent.id) {
+      const order = await prisma.order.findUnique({
+        where: {
+          paymentIntentId: paymentIntent.id,
+        },
+      });
+
+      if (order) {
+        await prisma.order.update({
+          where: {
+            id: order.id,
+          },
+          data: {
+            paymentStatus: "PAID",
+          },
+        });
+      }
+    }
+  }
+
+  if (event.type === "payment_intent.payment_failed") {
+    const paymentIntent =
+      event.data.object as Stripe.PaymentIntent;
+
+    if (paymentIntent.id) {
+      const order = await prisma.order.findUnique({
+        where: {
+          paymentIntentId: paymentIntent.id,
+        },
+      });
+
+      if (order) {
+        await prisma.order.update({
+          where: {
+            id: order.id,
+          },
+          data: {
+            paymentStatus: "FAILED",
+          },
+        });
+      }
+    }
+  }
+
+  return { received: true };
+};
+
 export const OrderService = {
   createOrder,
 
@@ -363,4 +534,7 @@ export const OrderService = {
   cancelOrder,
 
   getAllOrders,
+
+  getOrderPaymentIntent,
+  handleStripeWebhook,
 };
