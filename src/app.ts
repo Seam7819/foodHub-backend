@@ -42,7 +42,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (_req, res) => {
-  res.json({ status: "ok", message: "FoodHub Backend is running." });
+  res.json({ status: "ok", message: "orgNest Backend is running." });
 });
 
 app.get(["/favicon.ico", "/favicon.png"], (req, res) => {
