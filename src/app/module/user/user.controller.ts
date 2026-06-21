@@ -19,7 +19,7 @@ const getAllUsers =
     }
   );
 
-  const updateUserStatus =
+const updateUserStatus =
   catchAsync(
     async (req, res) => {
       const result =
@@ -38,7 +38,42 @@ const getAllUsers =
     }
   );
 
-  export const UserController = {
+const getTheme =
+  catchAsync(
+    async (req, res) => {
+      const result =
+        await UserService.getTheme(req.user!.id);
+
+      sendResponse(res, {
+        success: true,
+        statusCode: 200,
+        message: "User theme retrieved successfully",
+        data: result,
+      });
+    }
+  );
+
+const updateTheme =
+  catchAsync(
+    async (req, res) => {
+      const result =
+        await UserService.updateTheme(
+          req.user!.id,
+          req.body.theme
+        );
+
+      sendResponse(res, {
+        success: true,
+        statusCode: 200,
+        message: "User theme updated successfully",
+        data: result,
+      });
+    }
+  );
+
+export const UserController = {
   getAllUsers,
   updateUserStatus,
+  getTheme,
+  updateTheme,
 };

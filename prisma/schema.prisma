@@ -37,6 +37,11 @@ enum PaymentStatus {
   FAILED
 }
 
+enum Theme {
+  LIGHT
+  DARK
+}
+
 model User {
   id          String      @id @default(uuid())
 
@@ -50,6 +55,7 @@ model User {
   image       String?
 
   status      UserStatus  @default(ACTIVE)
+  theme       Theme       @default(LIGHT)
 
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
@@ -61,6 +67,7 @@ model User {
   orders      Order[]
 
   reviews     Review[]
+  posts       BlogPost[]
 
   @@index([email])
   @@index([role])
@@ -187,6 +194,21 @@ model Order {
 
   @@index([userId])
   @@index([status])
+}
+
+model BlogPost {
+  id          String    @id @default(uuid())
+  authorId    String
+  title       String
+  content     String
+  isPublished Boolean   @default(true)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  author      User      @relation(fields: [authorId], references: [id])
+
+  @@index([authorId])
+  @@index([createdAt])
 }
 
 model OrderItem {

@@ -4,34 +4,36 @@ import { Role } from "../src/generated/enums";
 
 
 async function main() {
-  const adminExists = await prisma.user.findUnique({
-    where: {
-      email: "admin@foodhub.com",
-    },
-  });
-
-  if (adminExists) {
-    console.log("Admin already exists");
-    return;
-  }
-
+  const adminEmails = ["admin@arg.com", "admin@org.com"];
   const hashedPassword = await bcrypt.hash(
     "Admin@123",
     12
   );
 
-  await prisma.user.create({
-    data: {
-      name: "FoodHub Admin",
-      email: "admin@foodhub.com",
-      password: hashedPassword,
-      role: Role.ADMIN,
-      status: "ACTIVE",
-    },
-  });
+  for (const email of adminEmails) {
+    const adminExists = await prisma.user.findUnique({
+      where: {
+        email,
+      },
+    });
 
-  console.log("Admin created successfully");
-  
+    if (adminExists) {
+      console.log(`Admin account already exists for ${email}`);
+      continue;
+    }
+
+    await prisma.user.create({
+      data: {
+        name: "FoodHub Admin",
+        email,
+        password: hashedPassword,
+        role: Role.ADMIN,
+        status: "ACTIVE",
+      },
+    });
+
+    console.log(`Admin created successfully for ${email}`);
+  }
 }
 
 main()

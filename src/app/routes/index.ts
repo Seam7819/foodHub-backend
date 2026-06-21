@@ -15,7 +15,8 @@ import { ProviderRoutes } from "../module/provider/provider.routes.js";
 import { DashboardRoutes } from "../module/dashboard/dashboard.routes.js";
 import { ProviderDashboardRoutes } from "../module/provider/providerDashboard.routes.js";
 import { HomeRoutes } from "../module/home/home.routes.js";
-
+import { BlogRoutes } from "../module/blog/blog.routes.js";
+import { AssistantRoutes } from "../module/assistant/assistant.routes.js";
 
 const router = Router();
 
@@ -86,6 +87,16 @@ router.use(
 router.use(
   "/home",
   HomeRoutes
+);
+
+router.use(
+  "/blog",
+  BlogRoutes
+);
+
+router.use(
+  "/assistant",
+  AssistantRoutes
 );
 
 router.use(notFound);

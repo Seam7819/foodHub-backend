@@ -4,10 +4,7 @@ import { prisma } from "../../../lib/prisma.js";
 import AppError from "../../errors/appError.js";
 import Stripe from "stripe";
 import config from "../../../config/index.js";
-
-const stripe = new Stripe(config.stripe.secretKey, {
-  apiVersion: "2023-10-16",
-});
+import getStripe from "../../../helpers/stripeHelper.js";
 
 const createOrder = async (
   userId: string,
@@ -58,6 +55,7 @@ const createOrder = async (
 
   const result = await prisma.$transaction(
     async (tx: Prisma.TransactionClient) => {
+      const stripe = getStripe();
       const paymentIntent = await stripe.paymentIntents.create({
         amount: Math.round(totalPrice * 100),
         currency: config.stripe.currency,
@@ -331,6 +329,7 @@ const getOrderPaymentIntent = async (
   let paymentIntent: Stripe.PaymentIntent;
 
   if (order.paymentIntentId) {
+    const stripe = getStripe();
     paymentIntent = await stripe.paymentIntents.retrieve(
       order.paymentIntentId
     );
@@ -345,8 +344,16 @@ const getOrderPaymentIntent = async (
         clientSecret: paymentIntent.client_secret,
       };
     }
+
+    if (paymentIntent.status === "succeeded") {
+      return {
+        order,
+        message: "Order already paid",
+      };
+    }
   }
 
+  const stripe = getStripe();
   paymentIntent = await stripe.paymentIntents.create({
     amount: Math.round(order.totalPrice * 100),
     currency: config.stripe.currency,
@@ -457,6 +464,7 @@ const handleStripeWebhook = async (
   let event: Stripe.Event;
 
   try {
+    const stripe = getStripe();
     event = stripe.webhooks.constructEvent(
       req.body,
       sig,

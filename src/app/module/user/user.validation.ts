@@ -8,6 +8,11 @@ const updateUserStatusSchema =
     ]),
   });
 
+const updateThemeSchema = z.object({
+  theme: z.enum(["LIGHT", "DARK"]),
+});
+
 export const UserValidation = {
   updateUserStatusSchema,
+  updateThemeSchema,
 };

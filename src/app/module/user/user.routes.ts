@@ -23,5 +23,18 @@ router.patch(
   UserController.updateUserStatus
 );
 
+router.get(
+  "/theme",
+  auth("ADMIN", "CUSTOMER", "PROVIDER"),
+  UserController.getTheme
+);
+
+router.patch(
+  "/theme",
+  auth("ADMIN", "CUSTOMER", "PROVIDER"),
+  validateRequest(UserValidation.updateThemeSchema),
+  UserController.updateTheme
+);
+
 export const UserRoutes =
   router;

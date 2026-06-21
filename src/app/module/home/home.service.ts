@@ -1,6 +1,18 @@
 import { prisma } from "../../../lib/prisma.js";
+import config from "../../../config/index.js";
 
 const getHomeData = async () => {
+  const branding = {
+    name: config.site.name,
+    shortName: config.site.shortName,
+    description: config.site.description,
+    primaryColor: config.site.primaryColor,
+    secondaryColor: config.site.secondaryColor,
+    accentColor: config.site.accentColor,
+    features: config.site.features,
+    themeSupport: config.site.themeSupport,
+  };
+
   // carousel: top 5 meals by average rating
   const carousel = await prisma.meal.findMany({
     orderBy: [{ averageRating: "desc" }, { createdAt: "desc" }],
@@ -42,7 +54,7 @@ const getHomeData = async () => {
     orderBy: { name: "asc" },
   });
 
-  return { carousel, featuredMeals, providers, categories };
+  return { branding, carousel, featuredMeals, providers, categories };
 };
 
 export const HomeService = { getHomeData };
