@@ -1,16 +1,20 @@
 import dotenv from "dotenv";
 import fs from "fs";
 
-const envFile = fs.existsSync(".env")
-  ? ".env"
-  : fs.existsSync(".vercel.env")
-  ? ".vercel.env"
-  : undefined;
+// Only load from .env file in development (local only).
+// On production (Vercel), env vars come from Vercel dashboard, not files.
+if (process.env.NODE_ENV !== "production") {
+  const envFile = fs.existsSync(".env")
+    ? ".env"
+    : fs.existsSync(".vercel.env")
+    ? ".vercel.env"
+    : undefined;
 
-if (envFile) {
-  dotenv.config({ path: envFile });
-} else {
-  dotenv.config();
+  if (envFile) {
+    dotenv.config({ path: envFile });
+  } else {
+    dotenv.config();
+  }
 }
 
 export default {
