@@ -77,6 +77,31 @@ const getAllMeals = async (
     sortOrder = "desc",
   } = query;
 
+  const allowedSortFields = [
+    "name",
+    "price",
+    "createdAt",
+    "updatedAt",
+    "averageRating",
+    "reviewCount",
+    "isAvailable",
+    "categoryId",
+    "providerId",
+  ] as const;
+
+  const sortByField = String(sortBy || "createdAt");
+  const sortOrderValue =
+    String(sortOrder).toLowerCase() === "asc"
+      ? "asc"
+      : "desc";
+
+  if (!allowedSortFields.includes(sortByField as any)) {
+    throw new AppError(
+      400,
+      `Invalid sortBy value. Allowed values: ${allowedSortFields.join(", ")}`
+    );
+  }
+
   const andConditions: Prisma.MealWhereInput[] =
     [];
 
@@ -116,17 +141,25 @@ const getAllMeals = async (
 
   // Price Range
 
-  if (minPrice || maxPrice) {
-    const priceFilter: Prisma.FloatFilter = {};
+  const priceFilter: Prisma.FloatFilter = {};
 
-    if (minPrice) {
-      priceFilter.gte = Number(minPrice);
-    }
+  if (
+    minPrice !== undefined &&
+    minPrice !== null &&
+    minPrice !== ""
+  ) {
+    priceFilter.gte = Number(minPrice);
+  }
 
-    if (maxPrice) {
-      priceFilter.lte = Number(maxPrice);
-    }
+  if (
+    maxPrice !== undefined &&
+    maxPrice !== null &&
+    maxPrice !== ""
+  ) {
+    priceFilter.lte = Number(maxPrice);
+  }
 
+  if (Object.keys(priceFilter).length > 0) {
     andConditions.push({
       price: priceFilter,
     });
@@ -137,34 +170,42 @@ const getAllMeals = async (
       ? { AND: andConditions }
       : {};
 
-  const skip =
-    (Number(page) - 1) *
-    Number(limit);
+  const pageNumber = Number(page);
+  const limitNumber = Number(limit);
 
-  const result =
-    await prisma.meal.findMany({
-      where: whereConditions,
+  if (Number.isNaN(pageNumber) || pageNumber < 1) {
+    throw new AppError(400, "Invalid page value");
+  }
 
-      include: {
-        category: true,
+  if (Number.isNaN(limitNumber) || limitNumber < 1) {
+    throw new AppError(400, "Invalid limit value");
+  }
 
-        provider: {
-          select: {
-            id: true,
-            userId: true,
-            businessName: true,
-          },
+  const skip = (pageNumber - 1) * limitNumber;
+
+  const result = await prisma.meal.findMany({
+    where: whereConditions,
+
+    include: {
+      category: true,
+
+      provider: {
+        select: {
+          id: true,
+          userId: true,
+          businessName: true,
         },
       },
+    },
 
-      skip,
+    skip,
 
-      take: Number(limit),
+    take: limitNumber,
 
-      orderBy: {
-        [sortBy]: sortOrder,
-      },
-    });
+    orderBy: {
+      [sortByField]: sortOrderValue,
+    },
+  });
 
   const total =
     await prisma.meal.count({

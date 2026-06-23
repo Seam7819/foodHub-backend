@@ -10,7 +10,7 @@ const router = Router();
 
 router.post(
   "/",
-  auth("PROVIDER"),
+  auth("PROVIDER", "ADMIN"),
   validateRequest(
     MealValidation.createMealValidationSchema
   ),

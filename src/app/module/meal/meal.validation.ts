@@ -4,7 +4,7 @@ const createMealValidationSchema = z.object({
   name: z.string().min(2),
   description: z.string().min(5),
 
-  price: z.number().positive(),
+  price: z.coerce.number().positive(),
 
   categoryId: z.string(),
 
@@ -16,13 +16,13 @@ const updateMealValidationSchema = z.object({
 
   description: z.string().min(5).optional(),
 
-  price: z.number().positive().optional(),
+  price: z.coerce.number().positive().optional(),
 
   categoryId: z.string().optional(),
 
   image: z.string().optional(),
 
-  isAvailable: z.boolean().optional(),
+  isAvailable: z.coerce.boolean().optional(),
 });
 
 export const MealValidation = {

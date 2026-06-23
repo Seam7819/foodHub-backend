@@ -10,7 +10,7 @@ const router = Router();
 
 router.post(
   "/",
-  auth("CUSTOMER"),
+  auth("CUSTOMER", "ADMIN"),
   validateRequest(
     OrderValidation.createOrderValidationSchema
   ),
@@ -19,25 +19,25 @@ router.post(
 
 router.get(
   "/",
-  auth("CUSTOMER"),
+  auth("CUSTOMER", "ADMIN"),
   OrderController.getMyOrders
 );
 
 router.get(
   "/:id",
-  auth("CUSTOMER"),
+  auth("CUSTOMER", "ADMIN"),
   OrderController.getSingleOrder
 );
 
 router.patch(
   "/cancel/:id",
-  auth("CUSTOMER"),
+  auth("CUSTOMER", "ADMIN"),
   OrderController.cancelOrder
 );
 
 router.post(
   "/confirm/:id",
-  auth("CUSTOMER"),
+  auth("CUSTOMER", "ADMIN"),
   OrderController.getOrderPaymentIntent
 );
 
